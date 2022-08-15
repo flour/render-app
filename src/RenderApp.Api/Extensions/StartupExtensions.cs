@@ -9,7 +9,15 @@ internal static class StartupExtensions
     {
         using var scope = builder.ApplicationServices.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        try
+        {
+            context.Database.Migrate();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Migration failed");
+        }
 
         return builder;
     }
