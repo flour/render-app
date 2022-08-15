@@ -4,7 +4,7 @@ using RenderApp.Commons;
 
 namespace RenderApp.Business.Features.SomeData.GetSomeData;
 
-public interface GetSomeDataQuery : IRequest<PagedResult<SomeDataDto>>
+public class GetSomeDataQuery : IRequest<PagedResult<SomeDataDto>>
 {
     public int Count { get; set; }
     public int Page { get; set; }

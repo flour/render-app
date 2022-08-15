@@ -15,19 +15,16 @@ public static class DependencyInjection
         GrpcClientFactory.AllowUnencryptedHttp2 = true;
         var serviceUrl = configuration.GetValue<string>(sectionName);
         return services
+            .AddScoped<LogHandler>()
+            .AddHttpClient()
             .AddCodeFirstGrpcClient<T>(opts =>
             {
                 opts.Address = new Uri(serviceUrl);
                 opts.ChannelOptionsActions.Add(channelOpts =>
                 {
-                    channelOpts.HttpHandler = new SocketsHttpHandler
-                    {
-                        KeepAlivePingDelay = TimeSpan.FromSeconds(60),
-                        KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
-                        PooledConnectionIdleTimeout = TimeSpan.FromSeconds(30),
-                        EnableMultipleHttp2Connections = true
-                    };
+                    channelOpts.DisposeHttpClient = true;
+                    channelOpts.MaxRetryAttempts = 2;
                 });
-            }).Services;
+            }).AddHttpMessageHandler<LogHandler>().Services;
     }
 }

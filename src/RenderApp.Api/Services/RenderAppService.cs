@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Mapster;
 using MediatR;
+using RenderApp.Business.Features.SomeData.GetSomeData;
 using RenderApp.Business.Features.SomeData.StreamData;
 using RenderApp.Commons;
 using RenderApp.GrpcClient;
@@ -27,10 +28,11 @@ internal class RenderAppService : IRenderAppService
             yield return item.Adapt<SomeDataResponse>();
     }
 
-    public Task<PagedResult<SomeDataResponse>> GetPaged(
+    public async Task<PagedResult<SomeDataResponse>> GetPaged(
         GetSomeDataPagedRequest request,
         CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(request.Adapt<GetSomeDataQuery>(), token);
+        return result.Adapt<PagedResult<SomeDataResponse>>();
     }
 }
