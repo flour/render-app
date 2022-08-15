@@ -17,9 +17,10 @@ builder.Services
 // Build app
 var app = builder.Build();
 app.Migrate();
-app.MapControllers();
+app.UseRouting();
 app.UseEndpoints(e =>
 {
+    e.MapControllers();
     e.MapGrpcService<RenderAppService>();
     e.MapCodeFirstGrpcReflectionService();
 });
