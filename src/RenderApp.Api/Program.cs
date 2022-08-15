@@ -1,14 +1,27 @@
 using Flour.Logging;
+using ProtoBuf.Grpc.Server;
+using RenderApp.Api.Extensions;
+using RenderApp.Api.Services;
+using RenderApp.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseLogging();
 
 // Add services to the container.
+builder.Services
+    .AddControllers().Services
+    .AddBusiness(builder.Configuration)
+    .AddCodeFirstGrpcReflection()
+    .AddCodeFirstGrpc();
 
-builder.Services.AddControllers();
-
+// Build app
 var app = builder.Build();
-
+app.Migrate();
 app.MapControllers();
+app.UseEndpoints(e =>
+{
+    e.MapGrpcService<RenderAppService>();
+    e.MapCodeFirstGrpcReflectionService();
+});
 
 app.Run();
