@@ -7,23 +7,23 @@ public class PagedResult<T> : IResult<T>
 {
     [DataMember(Order = 3)] public int Count { get; set; }
     [DataMember(Order = 4)] public int Page { get; set; }
-    [DataMember(Order = 5)] public int Total { get; set; }
+    [DataMember(Order = 5)] public long Total { get; set; }
     [DataMember(Order = 6)] public IEnumerable<T> Data { get; set; }
     [DataMember(Order = 1)] public bool Success { get; set; }
     [DataMember(Order = 2)] public string Message { get; set; }
     [DataMember(Order = 7)] public int StatusCode { get; set; }
 
-    public static PagedResult<T> Ok(IEnumerable<T> data, int count = 0, int page = 0, int total = 0)
+    public static PagedResult<T> Ok(IEnumerable<T> data, int count = 0, int page = 0, long total = 0)
     {
         return New(null, 200, data, true, count, page, total);
     }
 
-    public static PagedResult<T> Created(IEnumerable<T> data, int count = 0, int page = 0, int total = 0)
+    public static PagedResult<T> Created(IEnumerable<T> data, int count = 0, int page = 0, long total = 0)
     {
         return New(null, 201, data, true, count, page, total);
     }
 
-    public static PagedResult<T> Updated(IEnumerable<T> data = default, int count = 0, int page = 0, int total = 0)
+    public static PagedResult<T> Updated(IEnumerable<T> data = default, int count = 0, int page = 0, long total = 0)
     {
         return New(null, 204, data, true, count, page, total);
     }
@@ -75,7 +75,7 @@ public class PagedResult<T> : IResult<T>
         bool success = false,
         int count = 0,
         int page = 0,
-        int total = 0)
+        long total = 0)
     {
         return new()
         {

@@ -11,6 +11,7 @@ public static class TypesRegistration
         IConfiguration configuration)
     {
         return services
-            .AddDbContextPool<AppDbContext>(e => e.UseNpgsql(configuration.GetConnectionString("default")));
+            .AddDbContextPool<AppDbContext>(e => e.UseNpgsql(configuration.GetConnectionString("default")))
+            .AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }
